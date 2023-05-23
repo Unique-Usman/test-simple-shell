@@ -12,7 +12,7 @@ void execute_command(char *args[], char *argv[])
     char *env[] = { NULL };
     pid_t child_pid;
     int status;
-	char *path;
+	const char *path; //added const here, the variable that recieve the return must not be muted directly
 	char *token;
 	char command_path[1024];
 	int command_found;
@@ -22,8 +22,9 @@ void execute_command(char *args[], char *argv[])
         path = getenv("PATH");
         command_path[1024];
         command_found = 0;
-        
-        token = strtok(path, ":");
+        char *tmp_path = malloc(sizeof(char) * (strlen(path) + 1)); //creating tmp_path to avoid changing the value of the path
+	strcpy(tmp_path, path);
+        token = strtok(tmp_path, ":"); //used the tmp_path here
         while (token != NULL) {
             strcpy(command_path, token);
             strcat(command_path, "/");
